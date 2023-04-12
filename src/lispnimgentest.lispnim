@@ -1,0 +1,6 @@
+(let (a 1))
+(proc (foo *) ((x y int) int) (do
+  (= result (* x (+ a y)))
+  (if (< result 0)
+    (raise (newException ValueError "result must be positive")))
+  (return result)))
