@@ -17,8 +17,18 @@ test "exception":
     check false
   except ValueError as e:
     check e.msg == "result must be positive"
-    if stackTraceAvailable():
+    template testStacktrace(body) =
+      when defined(nimscript):
+        echo "cannot test stacktrace, not available"
+      elif declared(stackTraceAvailable):
+        if stackTraceAvailable():
+          body
+        else:
+          echo "cannot test stacktrace, not available"
+      elif compileOption("stacktrace"):
+        body
+      else:
+        echo "cannot test stacktrace, not available"
+    testStacktrace:
       let st = getStackTrace(e)
       check "lispnimgentest.lispnim" in st
-    else:
-      echo "cannot test stacktrace, not available"
