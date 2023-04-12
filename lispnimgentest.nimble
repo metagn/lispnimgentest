@@ -15,14 +15,16 @@ requires "https://github.com/metagn/lispnimgen"
 
 import os, strutils
 
+# generate nim files from lispnim files after installing
 after install:
   let lispnimgenPath = strip staticExec"nimble path lispnimgen"
   let exePath = lispnimgenPath / "lispnimgen"
   exec quoteShellCommand([exePath, getPkgDir()])
 
+
+# unrelated test task
 when (compiles do: import nimbleutils):
   import nimbleutils
-
 task tests, "run tests for multiple backends":
   when declared(runTests):
     runTests(backends = {c, js, nims})
